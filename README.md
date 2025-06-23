@@ -70,7 +70,18 @@ Then open [http://localhost:8124/docs](http://localhost:8124/docs) to try the AP
 | CLI    | `--folder`             | `"\\Personal Folders\\Project X\\Action Items"` | MAPI path of the Tasks folder to operate on.        |
 | Env    | `OUTLOOK_TASKS_FOLDER` | same as above                                   | Same purpose when CLI not provided.                 |
 | Env    | `OUTLOOK_PROFILE`      | `"Contoso"`                                     | Force a specific Outlook profile if multiple exist. |
+| Env    | `HOST`                 | `0.0.0.0`                                       | Host address to bind the server to.                 |
+| Env    | `PORT`                 | `8124`                                          | Port to run the server on.                          |
 | Env    | `LOG_LEVEL`            | `INFO`                                          | Standard FastAPI/uvicorn logging level.             |
+
+### Environment File
+
+The application supports loading environment variables from a `.env` file in the project root. Copy the `.env-example` file to `.env` and customize as needed:
+
+```bash
+cp .env-example .env
+# Then edit .env with your preferred settings
+```
 
 ---
 

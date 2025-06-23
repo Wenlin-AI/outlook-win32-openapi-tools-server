@@ -28,11 +28,20 @@ def create_app() -> FastAPI:
 
 def run() -> None:
     import uvicorn
+    import logging
+
+    # Setup logging
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+    logger = logging.getLogger("uvicorn")
+    logger.setLevel(logging.DEBUG)
 
     app = create_app()
-    host = os.getenv("HOST", "0.0.0.0")
+    host = os.getenv("HOST", "localhost")
     port = int(os.getenv("PORT", "8124"))
-    uvicorn.run(app, host=host, port=port)
+    uvicorn.run(app, host=host, port=port, log_level="debug")
 
 
 if __name__ == "__main__":  # pragma: no cover
