@@ -1,0 +1,22 @@
+[project]
+name = "outlook-win32-openapi-tools-server"
+version = "0.1.0"
+description = "Win32 COM based Outlook Tasks API server"
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Henri Wenlin", email = "henri@example.com"}]
+
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "pywin32; sys_platform == 'win32'",
+    "python-dotenv",
+]
+
+[project.scripts]
+outlook-win32-openapi-tools-server = "app.main:run"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
