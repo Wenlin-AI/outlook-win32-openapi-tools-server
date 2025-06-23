@@ -1,0 +1,4 @@
+tools:
+  - name: outlook-tasks
+    spec_url: http://localhost:8124/openapi.json
+    base_url: http://localhost:8124

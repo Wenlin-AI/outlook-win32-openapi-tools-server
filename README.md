@@ -83,7 +83,7 @@ Then open [http://localhost:8124/docs](http://localhost:8124/docs) to try the AP
 | `POST /tasks/{entryId}/complete` | Mark task complete.                                   |
 | `DELETE /tasks/{entryId}`        | Permanently delete task.                              |
 
-*(See **``** for full schema.)*
+(See **`openapi.json`** for full schema.)
 
 ### Example: create a task
 
@@ -122,7 +122,7 @@ docker run --rm -p 8124:8124 \
 │       └── tasks.py     # CRUD routes
 ├── docs/                # Project documentation & ADRs
 ├── examples/            # Integration snippets (LangChain, WebUI…)
-├── openapi.yaml         # Auto‑generated or hand‑crafted spec
+├── openapi.json         # Auto‑generated API schema from FastAPI
 ├── Dockerfile           # Windows Server Core image
 ├── pyproject.toml       # Dependencies + uv entry point
 └── README.md            # This file
