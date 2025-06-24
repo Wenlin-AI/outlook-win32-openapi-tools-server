@@ -66,7 +66,8 @@ class OutlookTasks:
 
         logger.info(f"Using tasks folder: {self.tasks_folder.Name}")
 
-        # Mapping of Outlook EntryID -> sequential task ID
+        # Mapping of Outlook EntryID -> sequential task ID. IDs are assigned
+        # per-process and rebuilt from Outlook items on demand.
         self._id_map: Dict[str, int] = {}
         self._reverse_map: Dict[int, str] = {}
         self._next_id = 1
@@ -157,16 +158,33 @@ class OutlookTasks:
             self._next_id += 1
         return self._id_map[entry_id]
 
+    def _build_id_map(self) -> None:
+        """Enumerate tasks and ensure each has a task ID."""
+        items = self.tasks_folder.Items
+        items = items.Restrict("[MessageClass] = 'IPM.Task'")
+        for task in items:
+            self._ensure_task_id(task.EntryID)
+
     def _entry_from_task_id(self, task_id: int) -> str:
         try:
             return self._reverse_map[task_id]
-        except KeyError as exc:  # pragma: no cover - thin validation
-            raise OutlookError(f"Task ID {task_id} not found") from exc
+        except KeyError:
+            # Rebuild mapping in case the process was restarted or mapping was
+            # not yet populated. This allows clients to reference tasks without
+            # listing them first.
+            self._build_id_map()
+            try:
+                return self._reverse_map[task_id]
+            except KeyError as exc:  # pragma: no cover - thin validation
+                raise OutlookError(f"Task ID {task_id} not found") from exc
 
     # Task operations -----------------------------------------------------
 
     def list_incomplete_tasks(self) -> List[Dict[str, Any]]:
         """List all incomplete tasks in the tasks folder."""
+        # Refresh mapping so every visible task has a numeric ID
+        self._build_id_map()
+
         items = self.tasks_folder.Items
         items = items.Restrict("[MessageClass] = 'IPM.Task'")
         incomplete = items.Restrict("[Complete] = 0")
